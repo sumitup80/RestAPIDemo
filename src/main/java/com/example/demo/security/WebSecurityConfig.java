@@ -3,6 +3,7 @@ package com.example.demo.security;
 import static com.example.demo.security.SecurityConstants.SIGN_UP_URL;
 
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.actuate.autoconfigure.security.servlet.EndpointRequest;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -32,6 +33,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable().authorizeRequests()
                 .antMatchers(HttpMethod.POST, SIGN_UP_URL).permitAll()
+                .requestMatchers(EndpointRequest.to("beans","health","metrics","info")).permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .addFilter(new JWTAuthenticationFilter(authenticationManager()))
