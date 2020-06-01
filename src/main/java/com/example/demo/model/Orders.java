@@ -4,15 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table (name = "orders")
@@ -45,8 +37,9 @@ public class Orders  implements Serializable{
 	@Column(name = "status")
 	private String status;
 	
-	@OneToMany(mappedBy = "orders", fetch = FetchType.LAZY,
-			 cascade = {CascadeType.ALL})   
+	@OneToMany(fetch = FetchType.LAZY,
+			 cascade = {CascadeType.ALL})
+	@JoinColumn(name = "order_id", nullable = false)
 	private List<OrderDetail> orderDetail;
 
 	public Integer getOrderId() {
@@ -105,12 +98,14 @@ public class Orders  implements Serializable{
 		this.status = status;
 	}
 
+	public List<OrderDetail> getOrderDetail() {return orderDetail;}
+
+	public void setOrderDetail(List<OrderDetail> orderDetail) {this.orderDetail = orderDetail;}
+
 	@Override
 	public String toString() {
 		return "Order [orderId=" + orderId + ", orderNumber=" + orderNumber + ", orderDescription=" + orderDescription
 				+ ", customerId=" + customerId + ", totalAmount=" + totalAmount + ", orderDate=" + orderDate
-				+ ", status=" + status + "]";
+				+ ", status=" + status + ", orderDetails" + orderDetail + "]";
 	}
-
-
 }

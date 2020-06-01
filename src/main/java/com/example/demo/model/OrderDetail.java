@@ -4,17 +4,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.io.Serializable;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.Id;
-import javax.persistence.IdClass;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
-@IdClass(value = OrderDetailId.class)
+//@IdClass(value = OrderDetailId.class)
 @Entity
 @Table (name = "order_detail")
 public class OrderDetail  implements Serializable{
@@ -23,12 +15,14 @@ public class OrderDetail  implements Serializable{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
-	@Id	
-	@Column(name = "order_id", insertable=false ,updatable=false )
-	private Integer orderId;
-	
+
+	/*@Id
+        @Column(name = "order_id", insert=false ,update=false )
+        private Integer orderId;*/
 	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private Integer orderDetailId;
+
 	@Column(name = "product_id", insertable=false ,updatable=false)
 	private Integer productId;
 	
@@ -38,22 +32,24 @@ public class OrderDetail  implements Serializable{
 	@Column(name = "amount")
 	private double amount;
 
-	@JsonIgnore
+	/*@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "order_id", nullable = false)
-	private Orders orders;
-	
+	private Orders orders;*/
+
 	@OneToOne
     @JoinColumn(name="product_id")
 	private Product product;
 
-	public Integer getOrderId() {
+	/*public Integer getOrderId() {
 		return orderId;
 	}
 
 	public void setOrderId(Integer orderId) {
 		this.orderId = orderId;
 	}
+*/
+
 
 	public Integer getProductId() {
 		return productId;
@@ -79,10 +75,20 @@ public class OrderDetail  implements Serializable{
 		this.amount = amount;
 	}
 
+	public Product getProduct() {return product;}
+
+	public void setProduct(Product product) {this.product = product;}
+
+	/*public Orders getOrders() {return orders;}
+
+	public void setOrders(Orders orders) {this.orders = orders;}*/
+
 	@Override
 	public String toString() {
-		return "OrderDetail [orderId=" + orderId + ", productId=" + productId + ", quantity=" + quantity + ", amount="
-				+ amount + "]";
+		return "OrderDetail [productId=" + productId + ", quantity=" + quantity + ", amount="
+				+ amount + ", product=" + product  + "]";
+		/*return "OrderDetail [orderId=" + orderId + ", productId=" + productId + ", quantity=" + quantity + ", amount="
+				+ amount + ", product=" + product + ", order=" + orders + "]";*/
 	}
 	
 }
